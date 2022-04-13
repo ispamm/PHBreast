@@ -31,7 +31,7 @@ Please cite our work if you found it useful:
       title={Multi-View Breast Cancer Classification via Hypercomplex Neural Networks}, 
       author={Lopez, E. and Grassucci, E. and Valleriani, M. and Comminiello, D.},
       year={2022},
-      journal={arXiv preprint: *add ref here*}
+      journal={arXiv preprint:2204.05798}
 }
 ```
 
