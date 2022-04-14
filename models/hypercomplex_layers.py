@@ -1,3 +1,7 @@
+# This layers are borrowed from: https://github.com/eleGAN23/HyperNets
+# by Eleonora Grassucci,
+# Please check the original reposiotry for further explanations.
+
 import numpy                   as np
 from   numpy.random            import RandomState
 import torch
