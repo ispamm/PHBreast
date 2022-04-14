@@ -1,0 +1,13 @@
+--epochs=100
+--batch_size=8
+--cuda=True
+--gpu_num=1
+--seed=1656079
+--Dataset=CBIS
+--num_views=2
+--lr=0.00001
+--optim=Adam
+--model=phcresnet18
+--n=2
+--train_dir=/home/lopez/Documents/CBIS/2_views/mass_2views/whole/torch_saved
+--model_state=/home/lopez/Documents/HyperNets/image-classification/checkpoints/best_mild-forest-118.pt

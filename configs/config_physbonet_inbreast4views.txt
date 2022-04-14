@@ -1,0 +1,15 @@
+--epochs=100
+--batch_size=4
+--cuda=True
+--gpu_num=1
+--seed=1656079
+--Dataset=INbreast
+--num_views=4
+--lr=0.00001
+--optim=Adam
+--model=physbonet
+--shared=True
+--n=2
+--pos_weight=0.4
+--train_dir=/home/lopez/Documents/INbreast/4_views/splits/split_state-42/torch_saved
+--model_state=/home/lopez/Documents/HyperNets/image-classification/checkpoints/best_mild-forest-118.pt

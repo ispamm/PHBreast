@@ -1,0 +1,14 @@
+--epochs=100
+--batch_size=8
+--cuda=True
+--gpu_num=1
+--seed=1656079
+--Dataset=INbreast
+--num_views=2
+--lr=0.00001
+--optim=Adam
+--model=phcresnet18
+--n=2
+--train_dir=/home/lopez/Documents/INbreast/2_views/splits/split_state-42/torch_saved
+--model_state=/home/lopez/Documents/HyperNets/image-classification/checkpoints/best_winter-pond-166.pt
+--patch_weights=False
