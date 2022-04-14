@@ -9,6 +9,6 @@
 --optim=Adam
 --model=phcresnet18
 --n=2
---train_dir=/home/lopez/Documents/INbreast/2_views/splits/split_state-42/torch_saved
---model_state=/home/lopez/Documents/HyperNets/image-classification/checkpoints/best_winter-pond-166.pt
+--train_dir=data/INbreast/2_views/splits/split_state-42/torch_saved
+--model_state=checkpoints/phresnet18_cbis2views.pt
 --patch_weights=False

@@ -9,4 +9,4 @@
 --optim=Adam
 --model=phcresnet18
 --n=2
---train_dir=/home/lopez/Documents/CBIS/2_views/patches10_2views/torch_saved
+--train_dir=data/CBIS/2_views/patches10_2views/torch_saved
