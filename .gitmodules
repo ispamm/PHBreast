@@ -1,0 +1,3 @@
+[submodule "early-stopping-pytorch"]
+	path = early-stopping-pytorch
+	url = https://github.com/Bjarten/early-stopping-pytorch.git
