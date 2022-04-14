@@ -11,7 +11,7 @@ This repository is under construction!
 Traditionally, deep learning-based methods for breast cancer classification perform a single-view analysis. However, radiologists simultaneously analyze all four views that compose a mammography exam, owing to the correlations contained in mammography views, which present crucial information for identifying tumors. In light of this, some studies have started to propose multi-view methods. Nevertheless, in such existing architectures, mammogram views are processed as independent images by separate convolutional branches, thus losing correlations among them. To overcome such limitations, in this paper we propose a novel approach for multi-view breast cancer classification based on parameterized hypercomplex neural networks. Thanks to hypercomplex algebra properties, our networks are able to model, and thus leverage, existing correlations between the different views that comprise a mammogram exam, thus mimicking the reading process performed by clinicians. As a consequence, the proposed method is able to handle the information of a patient altogether without breaking the multi-view nature of the exam. Starting from the proposed hypercomplex approach, we define architectures designed to process two-view exams, namely PHResNets, and four-view exams, i.e., PHYSEnet and PHYSBOnet, with the ability to grasp inter-view correlations in a wide range of clinical use cases.
 Through an extensive experimental evaluation conducted with two publicly available datasets, CBIS-DDSM and INbreast, we demonstrate that our parameterized hypercomplex models clearly outperform real-valued counterparts and also state-of-the-art methods, proving that breast cancer classification benefits from the proposed multi-view architecture.
 
-## Usage
+## Usage :information_source:
 
 - `pip install -r requirements.txt`
 - Choose the configuration and run the experiment: 
@@ -20,7 +20,7 @@ Through an extensive experimental evaluation conducted with two publicly availab
 
 The experiment will be directly tracked on [Weight&Biases](https://wandb.ai/).
 
-### Training 
+### Training :hammer:
 
 To repeat **two-view** experiments in the paper use the configuration files provided in `configs/`:
 - Training patch classifier: `config_phcresnet_cbis_patches.txt`.
@@ -33,13 +33,13 @@ To repeat **four-view** experiments in the paper use the configuration files pro
 - Training PHYSEnet (pretrained on Patches): `config_physenet_inbreast4views_patches_pretr.txt`.
 - Training PHYSEnet (pretrained on Patches + CBIS): `config_physenet_inbreast4views_wholeimg_pretr.txt`.
 
-### Evaluation
+### Evaluation :electric_plug:
 
 For evaluation simply download the weights and use the same configuration file as above by changing:
 - `--model_state=/path/to/weights` with the path of the dowloaded weights.
 - `--evaluate_model=True`.
 
-## Pretrained models
+## Pretrained models :nut_and_bolt:
 
 | Model                        | Params | Storage Mem | Pretraining mode | Employed Dataset | Weights Link |
 |------------------------------|:------:|:-----------:|:----------------:|:----------------:|:------------:|
