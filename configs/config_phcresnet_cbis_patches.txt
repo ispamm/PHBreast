@@ -1,7 +1,7 @@
 --epochs=100
 --batch_size=32
 --cuda=True
---gpu_num=1
+--gpu_num=0
 --seed=1656079
 --Dataset=CBIS_patches
 --num_views=2

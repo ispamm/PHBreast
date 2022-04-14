@@ -1,0 +1,15 @@
+--epochs=100
+--batch_size=4
+--cuda=True
+--gpu_num=0
+--seed=1656079
+--Dataset=INbreast
+--num_views=4
+--lr=0.00001
+--optim=Adam
+--model=physbonet
+--shared=True
+--n=2
+--pos_weight=0.4
+--train_dir=data/INbreast/4_views/splits/split_state-42/torch_saved
+--model_state=checkpoints/phresnet18_patch_classifier.pt
