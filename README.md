@@ -20,6 +20,19 @@ Through an extensive experimental evaluation conducted with two publicly availab
 
 The experiment will be directly tracked on [Weight&Biases](https://wandb.ai/).
 
+## Data :open_file_folder:
+
+You can download the preprocessed data here. Each .zip file contains the training and validation splits. 
+To use the provided DataLoader, simply pass  `--train_dir=/path/to/unzipped_folder`.
+
+| Dataset          | Num views | Link   |
+|------------------|:---------:|:------:|
+| CBIS - patches   | 2 views   | [Link](https://drive.google.com/file/d/15jVK-ICQ8c4zKp807q53ds5PEKsvNDzq/view?usp=sharing) |
+| CBIS - mass      | 2 views   | [Link](https://drive.google.com/file/d/16H0JbQKecIy8i376--m_ut-PwXduRDNJ/view?usp=sharing) |
+| CBIS - mass+calc | 2 views   | [Link](https://drive.google.com/file/d/1pPmFNwFbvDBvzD4Srw-p6Kw__r-gY7U8/view?usp=sharing) |
+| INbreast         | 2 views   | [Link](https://drive.google.com/file/d/1dDwH8E-1jg0k5VzpJ8pKiM_2KwRKagZ1/view?usp=sharing) |
+| INbreast         | 4 views   | [Link](https://drive.google.com/file/d/1Gn3U6cS1TYQ7N_qDT6awRubawio6_8PV/view?usp=sharing) |
+
 ### Training :hammer:
 
 To repeat **two-view** experiments in the paper use the configuration files provided in `configs/`:
@@ -68,7 +81,7 @@ Please cite our work if you found it useful:
 }
 ```
 
-## Similar reporitories :busts_in_silhouette:
+## Similar repositories :busts_in_silhouette:
 
 * [HyperNets](https://github.com/eleGAN23/HyperNets).
 * [PHC-GNN](https://github.com/bayer-science-for-a-better-life/phc-gnn).
