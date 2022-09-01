@@ -8,7 +8,6 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 from utils.utils import load_weights
-import matplotlib.pyplot as plt
 
 class BasicBlock(nn.Module):
     expansion = 1
