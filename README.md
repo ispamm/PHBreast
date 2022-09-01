@@ -52,6 +52,10 @@ For evaluation simply download the weights and use the same configuration file a
 - `--model_state=/path/to/weights` with the path of the dowloaded weights.
 - `--evaluate_model=True`.
 
+### Visualization :chart_with_upwards_trend:
+
+To visualize the saliency maps and activation maps you can use the notebook Visualize.ipynb.
+
 ## Pretrained models :nut_and_bolt:
 
 | Model                        | Params | Storage Mem | Pretraining mode | Employed Dataset | Weights Link |
