@@ -3,9 +3,6 @@ PHBreast: Official PyTorch repository for Multi-View Breast Cancer Classificatio
 
 Eleonora Lopez, [Eleonora Grassucci](https://sites.google.com/view/eleonoragrassucci/home-page?authuser=0), Martina Valleriani, and [Danilo Comminiello](https://danilocomminiello.site.uniroma1.it/)
 
-
-This repository is under construction!
-
 ## Abstract 📑
 
 Traditionally, deep learning-based methods for breast cancer classification perform a single-view analysis. However, radiologists simultaneously analyze all four views that compose a mammography exam, owing to the correlations contained in mammography views, which present crucial information for identifying tumors. In light of this, some studies have started to propose multi-view methods. Nevertheless, in such existing architectures, mammogram views are processed as independent images by separate convolutional branches, thus losing correlations among them. To overcome such limitations, in this paper we propose a novel approach for multi-view breast cancer classification based on parameterized hypercomplex neural networks. Thanks to hypercomplex algebra properties, our networks are able to model, and thus leverage, existing correlations between the different views that comprise a mammogram exam, thus mimicking the reading process performed by clinicians. As a consequence, the proposed method is able to handle the information of a patient altogether without breaking the multi-view nature of the exam. Starting from the proposed hypercomplex approach, we define architectures designed to process two-view exams, namely PHResNets, and four-view exams, i.e., PHYSEnet and PHYSBOnet, with the ability to grasp inter-view correlations in a wide range of clinical use cases.
