@@ -8,7 +8,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 from utils.utils import load_weights
-
+import matplotlib.pyplot as plt
 
 class BasicBlock(nn.Module):
     expansion = 1
@@ -69,13 +69,14 @@ class Bottleneck(nn.Module):
 
 
 class ResNet(nn.Module):
-    def __init__(self, block, num_blocks, channels=4, num_classes=10, gap_output=False, before_gap_output=False):
+    def __init__(self, block, num_blocks, channels=4, num_classes=10, gap_output=False, before_gap_output=False, visualize=False):
         super(ResNet, self).__init__()
         self.block = block
         self.num_blocks = num_blocks
         self.in_planes = 64
         self.gap_output = gap_output
         self.before_gap_out = before_gap_output
+        self.visualize = visualize
 
         self.conv1 = nn.Conv2d(channels, 64, kernel_size=3,
                                stride=1, padding=1, bias=False)
@@ -93,7 +94,7 @@ class ResNet(nn.Module):
         self.layer5 = self._make_layer(Bottleneck, 512, 2, stride=2)
         self.layer6 = self._make_layer(Bottleneck, 512, 2, stride=2)
         
-        if not self.gap_output and not self.before_gap_output:
+        if not self.gap_output and not self.before_gap_out:
             self.linear = nn.Linear(1024, num_classes)
 
     def _make_layer(self, block, planes, num_blocks, stride):
@@ -109,22 +110,24 @@ class ResNet(nn.Module):
         out = self.layer1(out)
         out = self.layer2(out)
         out = self.layer3(out)
-        out = self.layer4(out)
+        out4 = self.layer4(out)
 
         if self.before_gap_out:
-            return out
+            return out4
         
         if self.layer5:
-            out = self.layer5(out)
-            out = self.layer6(out)
+            out5 = self.layer5(out4)
+            out6 = self.layer6(out5)
 
-        n, c, _, _ = out.size()
-        out = out.view(n, c, -1).mean(-1)
+        n, c, _, _ = out6.size()
+        out = out6.view(n, c, -1).mean(-1)
 
         if self.gap_output:
             return out
 
         out = self.linear(out)
+        if self.visualize:
+            return out, out4, out6
         return out
 
 class Encoder(nn.Module):
@@ -179,9 +182,10 @@ class SharedBottleneck(nn.Module):
         return out
 
 class Classifier(nn.Module):
-    def __init__(self, num_classes, in_planes):
+    def __init__(self, num_classes, in_planes=512, visualize=False):
         super(Classifier, self).__init__()
         self.in_planes = in_planes
+        self.visualize = visualize
 
         self.layer5 = self._make_layer(Bottleneck, 512, 2, stride=2)
         self.layer6 = self._make_layer(Bottleneck, 512, 2, stride=2)
@@ -197,10 +201,15 @@ class Classifier(nn.Module):
 
     def forward(self, x):
         out = self.layer5(x)
-        out = self.layer6(out)
-        n, c, _, _ = out.size()
-        out = out.view(n, c, -1).mean(-1)
+        feature_maps = self.layer6(out)
+
+        n, c, _, _ = feature_maps.size()
+        out = feature_maps.view(n, c, -1).mean(-1)
         out = self.linear(out)
+
+        if self.visualize:
+            return out, feature_maps
+
         return out
 
 class SBOnet(nn.Module):
@@ -263,17 +272,17 @@ class SEnet(nn.Module):
                      In the latter case also Classifier branches will be initialized.
     """
 
-    def __init__(self, num_classes=1, weights=None, patch_weights=True):
+    def __init__(self, num_classes=1, weights=None, patch_weights=True, visualize=False):
         super(SEnet, self).__init__()
-
+        self.visualize = visualize
         self.resnet18 = ResNet18(num_classes=num_classes, channels=2, before_gap_output=True)
         
         if weights:
             print("Loading weights for resnet18 from ", weights)
             load_weights(self.resnet18, weights)
         
-        self.classifier_sx = Classifier(n, num_classes)
-        self.classifier_dx = Classifier(n, num_classes)
+        self.classifier_sx = Classifier(num_classes, visualize=visualize)
+        self.classifier_dx = Classifier(num_classes, visualize=visualize)
 
         if not patch_weights and weights:
             print("Loading weights for classifiers from ", weights)
@@ -282,23 +291,35 @@ class SEnet(nn.Module):
     
     def forward(self, x):
         x_sx, x_dx = x
-        
+
         # Apply Encoder
-        out_sx = self.resnet18(x_sx)
-        out_dx = self.resnet18(x_dx)
+        out_enc_sx = self.resnet18(x_sx)
+        out_enc_dx = self.resnet18(x_dx)
         
-        # Apply refiner blocks + classifier
-        out_sx = self.classifier_sx(out_sx)
-        out_dx = self.classifier_dx(out_dx)
+        if self.visualize:
+            out_sx, act_sx = self.classifier_sx(out_enc_sx)
+            out_dx, act_dx = self.classifier_dx(out_enc_dx)
+        else:
+            # Apply refiner blocks + classifier
+            out_sx = self.classifier_sx(out_enc_sx)
+            out_dx = self.classifier_dx(out_enc_dx)
         
         out = torch.cat([out_sx, out_dx], dim=0)
+
+        if self.visualize:
+            return out, out_enc_sx, out_enc_dx, act_sx, act_dx
 
         return out
 
 
-def ResNet18(num_classes=10, channels=4, gap_output=False, before_gap_output=False):
-    return ResNet(BasicBlock, [2, 2, 2, 2], num_classes=num_classes, channels=channels, 
-                  gap_output=gap_output, before_gap_output=before_gap_output)
+def ResNet18(num_classes=10, channels=4, gap_output=False, before_gap_output=False, visualize=False):
+    return ResNet(BasicBlock, 
+                  [2, 2, 2, 2], 
+                  num_classes=num_classes, 
+                  channels=channels, 
+                  gap_output=gap_output, 
+                  before_gap_output=before_gap_output,
+                  visualize=visualize)
 
 def ResNet50(num_classes=10, channels=4):
     return ResNet(Bottleneck, [3, 4, 6, 3], num_classes=num_classes, channels=channels)

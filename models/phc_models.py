@@ -79,7 +79,7 @@ class PHCResNet(nn.Module):
     - gap_output: True to rerurn the output after gap and before final linear layer
     """
 
-    def __init__(self, block, num_blocks, channels=4, n=4, num_classes=10, before_gap_output=False, gap_output=False):
+    def __init__(self, block, num_blocks, channels=4, n=4, num_classes=10, before_gap_output=False, gap_output=False, visualize=False):
         super(PHCResNet, self).__init__()
         self.block = block
         self.num_blocks = num_blocks
@@ -87,6 +87,7 @@ class PHCResNet(nn.Module):
         self.n = n
         self.before_gap_out = before_gap_output
         self.gap_output = gap_output
+        self.visualize = visualize
 
         self.conv1 = PHConv(n, channels, 64, kernel_size=3, stride=1, padding=1)
         self.bn1 = nn.BatchNorm2d(64)
@@ -123,23 +124,27 @@ class PHCResNet(nn.Module):
         out = self.layer1(out)
         out = self.layer2(out)
         out = self.layer3(out)
-        out = self.layer4(out)
+        out4 = self.layer4(out)
         
         if self.before_gap_out:
-            return out
+            return out4
         
         if self.layer5:
-            out = self.layer5(out)
-            out = self.layer6(out)
+            out5 = self.layer5(out4)
+            out6 = self.layer6(out5)
         
         # global average pooling (GAP)
-        n, c, _, _ = out.size()
-        out = out.view(n, c, -1).mean(-1)
+        n, c, _, _ = out6.size()
+        out = out6.view(n, c, -1).mean(-1)
         
         if self.gap_output:
             return out
 
         out = self.linear(out)
+
+        if self.visualize:
+            # return the final output and activation maps at two different levels
+            return out, out4, out6
         return out
 
 class Encoder(nn.Module):
@@ -206,10 +211,11 @@ class Classifier(nn.Module):
     Classifier branch in PHYSEnet.
     """
 
-    def __init__(self, n, num_classes, in_planes=512):
+    def __init__(self, n, num_classes, in_planes=512, visualize=False):
         super(Classifier, self).__init__()
         self.in_planes = in_planes
-        
+        self.visualize = visualize
+
         # Refiner blocks
         self.layer5 = self._make_layer(Bottleneck, 512, 2, stride=2, n=n)
         self.layer6 = self._make_layer(Bottleneck, 512, 2, stride=2, n=n)
@@ -225,10 +231,15 @@ class Classifier(nn.Module):
 
     def forward(self, x):
         out = self.layer5(x)
-        out = self.layer6(out)
-        n, c, _, _ = out.size()
-        out = out.view(n, c, -1).mean(-1)
+        feature_maps = self.layer6(out)
+
+        n, c, _, _ = feature_maps.size()
+        out = feature_maps.view(n, c, -1).mean(-1)
         out = self.linear(out)
+
+        if self.visualize:
+            return out, feature_maps
+
         return out
 
 class PHYSBOnet(nn.Module):
@@ -291,17 +302,17 @@ class PHYSEnet(nn.Module):
                      In the latter case also Classifier branches will be initialized.
     """
 
-    def __init__(self, n=2, num_classes=1, weights=None, patch_weights=True):
+    def __init__(self, n=2, num_classes=1, weights=None, patch_weights=True, visualize=False):
         super(PHYSEnet, self).__init__()
-
+        self.visualize = visualize
         self.phcresnet18 = PHCResNet18(n=2, num_classes=num_classes, channels=2, before_gap_output=True)
         
         if weights:
             print("Loading weights for phcresnet18 from ", weights)
             load_weights(self.phcresnet18, weights)
         
-        self.classifier_sx = Classifier(n, num_classes)
-        self.classifier_dx = Classifier(n, num_classes)
+        self.classifier_sx = Classifier(n, num_classes, visualize=visualize)
+        self.classifier_dx = Classifier(n, num_classes, visualize=visualize)
 
         if not patch_weights and weights:
             print("Loading weights for classifiers from ", weights)
@@ -312,19 +323,33 @@ class PHYSEnet(nn.Module):
         x_sx, x_dx = x
         
         # Apply Encoder
-        out_sx = self.phcresnet18(x_sx)
-        out_dx = self.phcresnet18(x_dx)
+        out_enc_sx = self.phcresnet18(x_sx)
+        out_enc_dx = self.phcresnet18(x_dx)
         
-        # Apply refiner blocks + classifier
-        out_sx = self.classifier_sx(out_sx)
-        out_dx = self.classifier_dx(out_dx)
+        if self.visualize:
+            out_sx, act_sx = self.classifier_sx(out_enc_sx)
+            out_dx, act_dx = self.classifier_dx(out_enc_dx)
+        else:
+            # Apply refiner blocks + classifier
+            out_sx = self.classifier_sx(out_enc_sx)
+            out_dx = self.classifier_dx(out_enc_dx)
         
         out = torch.cat([out_sx, out_dx], dim=0)
 
+        if self.visualize:
+            return out, out_enc_sx, out_enc_dx, act_sx, act_dx
+
         return out
 
-def PHCResNet18(channels=4, n=4, num_classes=10, before_gap_output=False, gap_output=False):
-    return PHCResNet(BasicBlock, [2, 2, 2, 2], channels=channels, n=n, num_classes=num_classes, before_gap_output=before_gap_output, gap_output=gap_output)
+def PHCResNet18(channels=4, n=4, num_classes=10, before_gap_output=False, gap_output=False, visualize=False):
+    return PHCResNet(BasicBlock, 
+                    [2, 2, 2, 2], 
+                    channels=channels, 
+                    n=n, 
+                    num_classes=num_classes, 
+                    before_gap_output=before_gap_output, 
+                    gap_output=gap_output,
+                    visualize=visualize)
 
 def PHCResNet50(channels=4, n=4, num_classes=10):
     return PHCResNet(Bottleneck, [3, 4, 6, 3], channels=channels, n=n, num_classes=num_classes)
