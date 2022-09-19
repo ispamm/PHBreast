@@ -1,6 +1,6 @@
-from models import phc_models
+from models import phc_models, real_models
 
-def GetModel(str_model, n, num_classes=1, weights=None, shared=False, patch_weights=True):
+def GetModel(str_model, n, num_classes=1, weights=None, shared=False, patch_weights=True, visualize=False):
     """
     Get model from str_model.
 
@@ -17,9 +17,9 @@ def GetModel(str_model, n, num_classes=1, weights=None, shared=False, patch_weig
     ## Two-view models ##
 
     if str_model == 'resnet18':
-        return real_models.ResNet18(num_classes, channels=n)
+        return real_models.ResNet18(num_classes, channels=n, visualize=visualize)
     elif str_model == 'phcresnet18':
-        return phc_models.PHCResNet18(channels=2, n=n, num_classes=num_classes)
+        return phc_models.PHCResNet18(channels=2, n=n, num_classes=num_classes, visualize=visualize)
         
     if str_model == 'resnet50':
         return real_models.ResNet50(num_classes, channels=n)
@@ -34,9 +34,9 @@ def GetModel(str_model, n, num_classes=1, weights=None, shared=False, patch_weig
         return phc_models.PHYSBOnet(n=n, shared=shared, num_classes=num_classes, weights=weights)
 
     if str_model == 'senet':
-        return real_models.SEnet(num_classes=num_classes, weights=weights, patch_weights=patch_weights)
+        return real_models.SEnet(num_classes=num_classes, weights=weights, patch_weights=patch_weights, visualize=visualize)
     elif str_model == 'physenet':
-        return phc_models.PHYSEnet(n=n, num_classes=num_classes, weights=weights, patch_weights=patch_weights)
+        return phc_models.PHYSEnet(n=n, num_classes=num_classes, weights=weights, patch_weights=patch_weights, visualize=visualize)
 
     else:
         raise ValueError ('Model not implemented, check allowed models (-help) \n \
