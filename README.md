@@ -20,7 +20,7 @@ The experiment will be directly tracked on [Weight&Biases](https://wandb.ai/).
 ## Data :open_file_folder:
 
 You can download the preprocessed data here. Each .zip file contains the training and validation splits. 
-To use the provided DataLoader, simply pass  `--train_dir=/path/to/unzipped_folder`.
+To use the provided DataLoader, simply pass  `--train_dir=/path/to/unzipped_folder`. A notebook with preprocessing of INbreast is also available in the utils folder.
 
 | Dataset          | Num views | Storage Mem | Link   |
 |------------------|:---------:|:-----------:|:------:|
