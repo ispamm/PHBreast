@@ -124,18 +124,20 @@ class PHCResNet(nn.Module):
         out = self.layer1(out)
         out = self.layer2(out)
         out = self.layer3(out)
-        out4 = self.layer4(out)
+        out = self.layer4(out)
+        features_4 = out
         
         if self.before_gap_out:
-            return out4
+            return out
         
         if self.layer5:
-            out5 = self.layer5(out4)
-            out6 = self.layer6(out5)
+            out = self.layer5(out)
+            out = self.layer6(out)
+            features_6 = out
         
         # global average pooling (GAP)
-        n, c, _, _ = out6.size()
-        out = out6.view(n, c, -1).mean(-1)
+        n, c, _, _ = out.size()
+        out = out.view(n, c, -1).mean(-1)
         
         if self.gap_output:
             return out
@@ -144,7 +146,7 @@ class PHCResNet(nn.Module):
 
         if self.visualize:
             # return the final output and activation maps at two different levels
-            return out, out4, out6
+            return out, features_4, features_6
         return out
 
 class Encoder(nn.Module):
