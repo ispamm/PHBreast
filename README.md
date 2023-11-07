@@ -1,7 +1,7 @@
 # Multi-View Breast Cancer Classification via Hypercomplex Neural Networks
 PHBreast: Official PyTorch repository for Multi-View Breast Cancer Classification via Hypercomplex Neural Networks, _under review_. [[ArXiv preprint](https://arxiv.org/pdf/2204.05798.pdf)]
 
-Eleonora Lopez, [Eleonora Grassucci](https://sites.google.com/view/eleonoragrassucci/home-page?authuser=0), Martina Valleriani, and [Danilo Comminiello](https://danilocomminiello.site.uniroma1.it/)
+Eleonora Lopez, [Eleonora Grassucci](https://sites.google.com/uniroma1.it/eleonoragrassucci/home-page), Martina Valleriani, and [Danilo Comminiello](https://danilocomminiello.site.uniroma1.it/)
 
 ## Abstract 📑
 
