@@ -84,5 +84,6 @@ Please cite our work if you found it useful:
 
 ## Similar repositories :busts_in_silhouette:
 
-* [HyperNets](https://github.com/eleGAN23/HyperNets).
-* [PHC-GNN](https://github.com/bayer-science-for-a-better-life/phc-gnn).
+* [HyperNets](https://github.com/eleGAN23/HyperNets)
+* [MHyEEG](https://github.com/ispamm/MHyEEG/)
+* [PHC-GNN](https://github.com/bayer-science-for-a-better-life/phc-gnn)
