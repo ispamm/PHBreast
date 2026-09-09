@@ -1,5 +1,5 @@
 # Multi-View Breast Cancer Classification via Hypercomplex Neural Networks
-PHBreast: Official PyTorch repository for Multi-View Hypercomplex Learning for Breast Cancer Screening, _IEEE Access_ 2026. [IEEEXplore](https://ieeexplore.ieee.org/abstract/document/11494775)[[ArXiv preprint](https://arxiv.org/pdf/2204.05798.pdf)]
+PHBreast: Official PyTorch repository for Multi-View Hypercomplex Learning for Breast Cancer Screening, _IEEE Access_, 2026. [[IEEEXplore](https://ieeexplore.ieee.org/abstract/document/11494775)][[ArXiv preprint](https://arxiv.org/pdf/2204.05798.pdf)]
 
 Eleonora Lopez, [Eleonora Grassucci](https://sites.google.com/uniroma1.it/eleonoragrassucci/home-page), Martina Valleriani, and [Danilo Comminiello](https://danilocomminiello.site.uniroma1.it/)
 
